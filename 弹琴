@@ -1,0 +1,1090 @@
+"ui";
+// oc 更改
+"ui";
+
+ui.statusBarColor("#00000000");var AES_Padding = "PKCS7Padding"; //PKCS5Padding/PKCS7Padding/NoPadding/ISO10126Padding
+var AES_Model = "ECB"; //ECB/CBC/CTR/OFB/CFB
+var AES_Key = "VanLin1546023011"; //16位
+var AES_Aws = "128";
+var AES_OutType = "base64"; //base64,Hex
+var AES_Chat = "UTF-8"; //UTF-8/gb2312/gbk/gb18030
+var storageCollec = storages.create("收藏列表");
+
+ui.layout(
+   <frame background="#FFFFFF">
+        <vertical h="*" w="*" gravity="center">
+            <text w="*" h="*" gravity="center" textStyle="bold" textSize="35sp" text="Sky自动弹琴" />
+        </vertical>
+    </frame>
+//
+);setTimeout(function () {
+    showMianUI();
+}, 1500);
+//显示主界面
+function showMianUI() {
+    //程序开始运行之前判断无障碍服务
+    if (auto.service == null) {
+        toastLog("请先开启无障碍服务！");
+        // return;
+    };
+    ui.layout(
+        <frame background="#00000000">
+            <vertical h="*">
+                <horizontal h="60dp" w="*" gravity="center_vertical">
+<linear layout_weight="1" marginLeft="40dp">
+<text gravity="center_vertical" color="#03A9F4" textStyle="bold" size="23sp">阿鑫66</text>
+</linear>
+<text w="auto" h="auto" text="设置" textSize="12sp" textStyle="bold" marginRight="5dp" />
+<img id="setting" src="https://pan.axxpan.com/api/v3/file/get/18955/ic_gg_48dp.png?sign=UU62wUix1GBiTlVM_D9B8hyGBHG6EwqGo2s-IBkkRdc%3D%3A0" w="40dp" h="40dp" circle="true" marginRight="25dp" />
+ </horizontal>
+ <card w="*" h="200dp" margin="30dp 30dp 30dp 30dp" cardCornerRadius="30dp" cardElevation="30dp" cardBackgroundColor="#8090B0" gravity="center_vertical">
+<vertical padding="15dp 15dp" h="auto">
+<horizontal gravity="center_vertical">
+ <text h="auto" w="auto" gravity="center" text="通知" textColor="#E8E8F8" textSize="16sp" textStyle="bold" />
+ 
+        <card id="notify" h="auto" w="auto" color="#7F000000" cardCornerRadius="12dp" cardElevation="0" cardBackgroundColor="#00838F" gravity="center" paddingTop="3dp" paddingBottom="3dp" marginLeft="10dp">
+                                <text h="auto" w="auto" text="公告" textColor="#FFFFFF" textSize="12sp" paddingRight="5dp" paddingLeft="5dp" paddingTop="3dp" paddingBottom="3dp" />
+                            </card>
+                            <card id="help" h="auto" w="auto" color="#7F000000" cardCornerRadius="12dp" cardElevation="0" cardBackgroundColor="#00838F" gravity="center" paddingTop="3dp" paddingBottom="3dp" marginLeft="7dp">
+                                <text h="auto" w="auto" text="帮助" textColor="#FFFFFF" textSize="12sp" paddingRight="5dp" paddingLeft="5dp" paddingTop="3dp" paddingBottom="3dp" />
+                            </card>
+                            <card id="peiw" h="auto" w="auto" color="#7F000000" cardCornerRadius="12dp" cardElevation="0" cardBackgroundColor="#00838F" gravity="center" paddingTop="3dp" paddingBottom="3dp" marginLeft="7dp">
+                                <text h="auto" w="auto" text="陪玩" textColor="#FFFFFF" textSize="12sp" paddingRight="5dp" paddingLeft="5dp" paddingTop="3dp" paddingBottom="3dp" />
+                            </card>
+                            <card id="福利" h="auto" w="auto" color="#7F000000" cardCornerRadius="12dp" cardElevation="0" cardBackgroundColor="#00838F" gravity="center" paddingTop="3dp" paddingBottom="3dp" marginLeft="7dp">
+                                <text h="auto" w="auto" text="福利" textColor="#FFFFFF" textSize="12sp" paddingRight="5dp" paddingLeft="5dp" paddingTop="3dp" paddingBottom="3dp" />
+                            </card>
+</horizontal>
+<ScrollView h="150dp" w="*">
+ <text id="notifi" h="*" w="*" text="内容" textColor="#FFFFFF" backgroundColor="#00B8D4" textSize="13sp" lines="25" />
+</ScrollView>
+</vertical>
+ </card>
+ <card w="*" h="45dp" margin="30dp 0dp 30dp 10dp" cardCornerRadius="12dp" cardElevation="3dp" cardBackgroundColor="#E8E8F8" gravity="center_vertical">
+<horizontal w="*" h="*" gravity="center_vertical">
+<text h="auto" w="auto" text="无障碍辅助  [第一步 必开]👉🏻" textColor="#101010" textSize="16sp" textStyle="bold" marginLeft="28dp" layout_weight="1" />
+<Switch id="switch1" marginRight="18dp" checked="{{auto.service != null}}">
+</Switch>
+</horizontal>
+ </card>
+ <card w="*" h="45dp" margin="30dp 0dp 30dp 10dp" cardCornerRadius="12dp" cardElevation="3dp" cardBackgroundColor="#E8E8F8" gravity="center_vertical">
+<horizontal w="*" h="*" gravity="center_vertical">
+<text h="auto" w="auto" text="开启悬浮窗  [第二步 窗口]👉🏻" textColor="#101010" textSize="16sp" textStyle="bold" marginLeft="28dp" layout_weight="1" />
+<Switch id="switch2" marginRight="18dp">
+</Switch>
+</horizontal>
+ </card>
+ <horizontal>
+<card h="60dp" layout_weight="1" margin="30dp 30dp 10dp 10dp" cardBackgroundColor="#C0F0F8" cardCornerRadius="12dp" cardElevation="3dp">
+<vertical>
+ <text w="*" gravity="center_horizontal" text="云端谱子" textSize="16sp" textStyle="bold" textColor="#101010" marginTop="3dp" />
+ <text id="pzcount" w="*" h="*" gravity="center" text="0" textSize="18sp" textStyle="bold" textColor="#8090B0" />
+</vertical>
+</card>
+<card h="60dp" layout_weight="1" margin="0dp 30dp 30dp 10dp" cardBackgroundColor="#C0F0F8" cardCornerRadius="12dp" cardElevation="3dp">
+<vertical>
+ <text w="*" gravity="center_horizontal" text="云端JS" textSize="16sp" textStyle="bold" textColor="#101010" marginTop="3dp" />
+ <text id="jscount" w="*" h="*" gravity="center" text="0" textSize="18sp" textStyle="bold" textColor="#8090B0" />
+</vertical>
+</card>
+ </horizontal>
+ <horizontal>
+ <card h="60dp" layout_weight="1" margin="30dp 10dp 30dp 20dp" cardBackgroundColor="#C0F0F8" cardCornerRadius="12dp" cardElevation="3dp">
+<vertical>
+<text w="*" gravity="center_horizontal" text="软件启动" textSize="16sp" textStyle="bold" textColor="#101010" marginTop="3dp" />
+<text id="startscount" w="*" h="*" gravity="center" text="0" textSize="18sp" textStyle="bold" textColor="#8090B0" />
+ </vertical>
+ </card>
+ </horizontal>
+ <horizontal>
+<card h="60dp" layout_weight="1" margin="30dp 0dp 30dp 10dp" cardBackgroundColor="#C0F0F8" cardCornerRadius="12dp" cardElevation="3dp">
+<vertical>
+ <text w="*" gravity="center_horizontal" text="云端调用" textSize="16sp" textStyle="bold" textColor="#101010" marginTop="3dp" />
+<text id="musiccount" w="*" h="*" gravity="center" text="0" textSize="18sp" textStyle="bold" textColor="#8090B0" />
+ </vertical>
+ </card>
+ </horizontal>
+ <text w="*" gravity="center_horizontal" text="弹琴交流QQ群:   949273576" textSize="15sp" textStyle="bold" textColor="#8090B0" marginTop="3dp" />
+            </vertical>
+        </frame>
+    );
+    var isCanFinish = false;
+    var isCanFinishTimeout;
+    ui.emitter.on("back_pressed", e => {
+        if (!isCanFinish) {
+            isCanFinish = true;
+            isCanFinishTimeout = setTimeout(() => {
+                toastLog("双击退出");
+                isCanFinish = false;
+            }, 800);
+            e.consumed = true;
+        } else {
+            clearTimeout(isCanFinishTimeout);
+            e.consumed = false;
+        };
+    });    ui.help.click(function () {
+        helps();
+    });    count();    function count() {
+        //获取数量
+        threads.start(function () {
+            var pznum = http.get("http://112.74.114.231/count.php").body.string();
+            var jsnum = http.get("http://112.74.114.231/jscount.php").body.string();
+            var stnum = http.get("http://112.74.114.231/startscount.php").body.string();
+            var mcnum = http.get("http://112.74.114.231/musiccount.php").body.string();
+            ui.pzcount.setText(pznum);
+            ui.jscount.setText(jsnum);
+            ui.startscount.setText(stnum);
+            ui.musiccount.setText(mcnum);        });
+    }    function helps() {
+        //获取帮助
+        threads.start(function () {
+            var url = "https://pan.axxpan.com/api/v3/file/get/10675/%E5%B8%AE%E5%8A%A9.html?sign=0nOL9Th7v0WSiIvF2tMsgrk9vRLHXQOVMn4z1qPTxuE%3D%3A0";
+            var r = http.get(url).body.json().help;
+          //  var r = AesDecode(r);
+            ui.notifi.setText(r.replace("@", "\n\n"));
+        });
+    }
+    notifys();    ui.notify.click(function () {
+        notifys();
+    });    function notifys() {
+        //获取公告
+        threads.start(function () {
+            var url = "https://pan.axxpan.com/api/v3/file/get/10675/%E5%B8%AE%E5%8A%A9.html?sign=0nOL9Th7v0WSiIvF2tMsgrk9vRLHXQOVMn4z1qPTxuE%3D%3A0";
+            var r = http.get(url).body.json().help;
+          //  var r = AesDecode(r);
+            ui.notifi.setText(r.replace("@", "\n\n"));
+        });
+    }
+    notifys();    ui.notify.click(function () {
+        notifys();
+    });    function notifys() {
+        //获取公告
+        threads.start(function () {
+            var url = "https://pan.axxpan.com/api/v3/file/get/10676/%E5%87%89%E8%8C%B6%E5%85%AC%E5%91%8A.html?sign=aL4mwTBrKibcpGz8HQEiVPViaD5EPpjSvKmNWI7Al00%3D%3A0";
+            var r = http.get(url).body.json().notifi;
+            //var r = AesDecode(r);
+            ui.notifi.setText(r.replace("@", "\n\n"));
+        });
+    } function 陪玩() {
+        //获取公告
+        threads.start(function () {
+            var url = "https://pan.axxpan.com/api/v3/file/get/35158/%E9%99%AA%E7%8E%A9.html?sign=gESu9zgB9Unzes8FQGVaoP_7CrPIOKwTIRpRqkc-U_I%3D%3A0";
+            var r = http.get(url).body.json().help;
+            //var r = AesDecode(r);
+            ui.notifi.setText(r.replace("@", "\n\n"));
+        });
+    }     ui.setting.click(function () {
+        app.startActivity("settings");
+    });    //判断无障碍是否开启
+    ui.switch1.on("check", function (checked) {
+        // 用户勾选无障碍服务的选项时，跳转到页面让用户去开启
+        if (checked && auto.service == null) {
+            app.startActivity({
+                action: "android.settings.ACCESSIBILITY_SETTINGS"
+            });
+        }
+        if (!checked && auto.service != null) {
+            auto.service.disableSelf();
+        }
+    });
+    // 当用户回到本界面时，resume事件会被触发
+    ui.emitter.on("resume", function () {
+        // 此时根据无障碍服务的开启情况，同步开关的状态
+        ui.switch1.checked = auto.service != null;
+    });    //判断悬浮窗权限
+    //判断悬浮窗权限
+    ui.switch2.on("check", function(checked) {
+        files.createWithDirs("/sdcard/弹琴/歌曲收藏.txt"); //收藏目录路径
+        if (checked) {
+            threads.start(function() {
+                var window = floaty.window(
+                    <frame>
+                        <linear w="51dp" h="51dp" gravity="center">
+                            <card id="action" w="45dp" h="45dp" cardBackgroundColor="#FFFFFF" cardElevation="3dp" cardCornerRadius="23dp" gravity="center" alpha="0.8">
+                                <img src="https://pan.axxpan.com/api/v3/file/get/18955/ic_gg_48dp.png?sign=UU62wUix1GBiTlVM_D9B8hyGBHG6EwqGo2s-IBkkRdc%3D%3A0" circle="true"/>
+                                {/* <text w="auto" h="auto" text="光"  gravity="center" textStyle="bold" textSize="35sp" textColor="#00AAFF" /> */}
+                            </card>
+                        </linear>
+                    </frame>
+                );
+                    var ex
+                var execution = null;
+                var touch = 0;
+                //悬浮窗拖动
+                window.action.setOnTouchListener(function(view, event) {
+                    switch (event.getAction()) {
+                        case event.ACTION_DOWN:
+                            x = event.getRawX();
+                            y = event.getRawY();
+                            windowX = window.getX();
+                            windowY = window.getY();
+                            downTime = new Date().getTime();
+                            return true;
+                        case event.ACTION_MOVE:
+                            //移动手指时调整悬浮窗位置
+                            window.setPosition(windowX + (event.getRawX() - x),
+                                windowY + (event.getRawY() - y));
+                            return true;
+                        case event.ACTION_UP:
+                            //手指弹起时如果偏移很小则判断为点击
+                            if (Math.abs(event.getRawY() - y) < 5 && Math.abs(event.getRawX() - x) < 5) {
+                                if (touch == 0) {
+                                    threads.start(function() {
+                                        //菜单
+                                        var i = dialogs.select("光遇功能", "云端弹奏", "JS弹奏", "TXT弹奏","收藏列表","设置触摸延迟", "设置键位(低音→高音)","反馈建议", "结束应用");
+                                        if (i == 0) { //谱子弹奏
+                                            var o = dialogs.select("谱子菜单", "云端谱子", "本地谱子");
+                                            if (o == 0) { //云端谱子
+                                                var k = dialogs.select("云端谱子", "谱子列表", "谱子搜索");
+                                                if (k == 1) {
+                                                    var sc = rawInput("搜索内容");
+                                                    if (sc == null) {
+                                                        return;
+                                                    }
+                                                } else {
+                                                    var sc = "";
+                                                }
+                                                if (k >= 0) {
+                                                    var json = threads.disposable();
+                                                    threads.start(function () {
+                                                        var j = http.get("http://112.74.114.231/list.php?sc=" + sc).body.json();
+                                                        json.setAndNotify(j);
+                                                    });
+                                                    var list = json.blockedGet().list;
+                                                    var sex = dialogs.select("请选择", list, 0);
+                                                    if (sex < 0) {
+                                                        return;
+                                                    }
+                                                    var storage = storages.create("212624749.键位");
+                                                    var keys = storage.get("skykey", "");
+                                                    var skykeys = 0;
+                                                    if (keys.length != 15) {
+                                                        toast("键位未设置");
+                                                        skykeys = 1;
+                                                    }
+                                                    if (skykeys == 0) {
+                                                        var Js = threads.disposable();
+                                                        threads.start(function () {
+                                                            var text = http.get("http://112.74.114.231/js.php?get=" + list[sex]).body.json();
+                                                            Js.setAndNotify(text);
+                                                        });
+                                                        var code = Js.blockedGet().code;
+                                                        var js = Js.blockedGet().js;
+                                                        if (code == 1) {
+                                                            MusicJs(AesDecode(js), list[sex]);
+                                                        } else {
+                                                            toast(AesDecode(js));
+                                                        }
+                                                    }
+                                                }
+                                            } else if (o == 1) { //本地谱子
+                                                //获取本地谱子
+                                                var dir = "/storage/emulated/0/脚本/";
+                                                var list = files.listDir(dir);
+                                                var len = list.length;
+                                                var lists = [];
+                                                var o = 0;
+                                                for (let i = 0; i < len; i++) {
+                                                    var child = files.join(dir, list[i]);
+                                                    if (!files.isDir(child)) {
+                                                        lists[o] = list[i];
+                                                        log(lists[o]);
+                                                        o++;
+                                                    }
+                                                }
+                                                var sex = dialogs.select("请选择", lists, 0);
+                                                if (sex < 0) {
+                                                    return;
+                                                }
+                                                var storage = storages.create("212624749.键位");
+                                                var keys = storage.get("skykey");
+                                                var skykeys = 0;
+                                                if (keys == undefined) {
+                                                    toast("键位未设置");
+                                                    skykeys = 1;
+                                                }
+                                                if (skykeys == 0) {
+                                                    var path = dir + lists[sex];
+                                                    //打开文件
+                                                    var file = open(path);
+                                                    //读取文件的所有内容
+                                                    var text = file.read();
+                                                    //关闭文件
+                                                    file.close();
+                                                    MusicJs(text, lists[sex]);
+                                                }
+                                            }
+                                        } else if (i == 1) { //JS弹奏
+                                            toast("JS乐谱音量-结束，勿点击按钮结束");
+                                            var o = dialogs.select("JS菜单", "云端JS", "本地JS");
+                                            if (o == 0) { //云端JS
+                                                var k = dialogs.select("云端JS", "谱子列表", "谱子搜索");
+                                                if (k == 1) {
+                                                    var sc = rawInput("搜索内容");
+                                                    if (sc == null) {
+                                                        return;
+                                                    }
+                                                } else {
+                                                    var sc = "";
+                                                }
+                                                if (k >= 0) {
+                                                    var json = threads.disposable();
+                                                    threads.start(function () {
+                                                        var j = http.get("http://fox.xjqxz.top/jslist.php?sc=" + sc).body.json();
+                                                        json.setAndNotify(j);
+                                                    });
+                                                    var list = json.blockedGet().list;
+                                                    var sex = dialogs.select("请选择", list, 0);
+                                                    if (sex < 0) {
+                                                        return;
+                                                    }
+                                                    threads.start(function () {
+                                                        var text = http.get("http://fox.xjqxz.top/jsfile.php?get=" + list[sex]).body.json();
+                                                        var code = text.code;
+                                                        var js = text.js;
+                                                      
+                                                        var js = AesDecode(js);
+                                                          log(js)
+                                                        var storage = storages.create("212624749.延迟");
+                                                        var keyms = storage.get("skyms");
+                                                        var js = js.replace("@触摸延迟@", keyms + "");
+                                                        setClip(js);
+                                                        log(js)
+                                                        files.write("212624749.js", js);
+                                                        if (code == 1) {
+                                                            var execution = engines.execScriptFile("212624749.js");
+                                                            //启用按键监听 
+                                                            events.observeKey();
+                                                            //监听音量下键按下 
+                                                            events.onKeyUp("volume_down", function (event) {
+                                                                execution.getEngine().forceStop();
+                                                                events.removeAllKeyUpListeners("volume_down");
+                                                            });
+                                                        } else {
+                                                            toast(AesDecode(js));
+                                                        }
+                                                    });                                                }
+                                            } else if (o == 1) { //本地JS
+                                                //获取本地JS
+                                                var dir = "/storage/emulated/0/";
+                                                var list = files.listDir(dir);
+                                                var len = list.length;
+                                                var lists = [];
+                                                var o = 0;
+                                                for (let i = 0; i < len; i++) {
+                                                    var child = files.join(dir, list[i]);
+                                                    if (!files.isDir(child)) {
+                                                        lists[o] = list[i];
+                                                        o++;
+                                                    }
+                                                }
+                                                var sex = dialogs.select("请选择", lists, 0);
+                                                if (sex < 0) {
+                                                    return;
+                                                }
+                                                var path = dir + lists[sex];
+                                                var execution = engines.execScriptFile(path);
+                                                //启用按键监听 
+                                                events.observeKey();
+                                                //监听音量下键按下 
+                                                events.onKeyDown("volume_down", function (event) {
+                                                    execution.getEngine().forceStop();
+                                                    events.removeAllKeyUpListeners("volume_down");
+                                                });
+                                            }
+                                        } else if (i == 2)
+                                              {
+                                               engines.execScriptFile("./功能.js");//调用本地的倒入文件
+                                          }else if (i == 3) { //收藏列表
+                                            //收藏列表
+                                            let lis = storageCollec.get("colloect")
+                                            if (lis.length >= 1 && lis[0] != "") {
+                                                var sex = dialogs.select("请选择", lis, 0);
+                                                if (sex < 0) {
+                                                    return;
+                                                }
+                                                var storage = storages.create("212624749.键位");
+                                                var keys = storage.get("skykey", "");
+                                                var skykeys = 0;
+                                                if (keys.length != 15) {
+                                                    toast("键位未设置");
+                                                    skykeys = 1;
+                                                }
+                                                if (skykeys == 0) {
+                                                    var Js = threads.disposable();
+                                                        threads.start(function() {
+                                                            var text = http.get("http://112.74.114.231/js.php?get=" + lis[sex]).body.json();
+                                                            Js.setAndNotify(text);
+                                                        });
+                                                        var code = Js.blockedGet().code;
+                                                        var js = Js.blockedGet().js;
+                                                        if (code == 200) {
+                                                            //log(AesDecode(js))
+                                                            MusicJs(js, lis[sex]);
+                                                        } else {
+                                                            toast(js);
+                                                        }
+                                                }
+                                            } else {
+                                                toast("请先收藏谱子")
+                                            }
+                                        }
+                                          else if (i == 4) { //设置延迟
+                                            var sex = dialogs.select("请选择", "1ms", "35ms", "40ms", "45ms", "50ms", "55ms", "60ms", "65ms", "70ms");
+                                            if (sex < 0) {
+                                                return;
+                                            }
+                                            var storage = storages.create("212624749.延迟");
+                                            if (sex == 0) {
+                                                var ms = 1;
+                                            } else if (sex == 1) {
+                                                var ms = 35;
+                                            } else if (sex == 2) {
+                                                var ms = 40;
+                                            } else if (sex == 3) {
+                                                var ms = 45;
+                                            } else if (sex == 4) {
+                                                var ms = 50;
+                                            } else if (sex == 5) {
+                                                var ms = 55;
+                                            } else if (sex == 6) {
+                                                var ms = 60;
+                                            } else if (sex == 7) {
+                                                var ms = 65;
+                                            } else if (sex == 8) {
+                                                var ms = 70;
+                                            }
+                                            storage.put("skyms", ms);
+                                            toast("已设置延迟：" + ms);
+                                        } else if (i == 5) { //设置键位
+                                            SetKey();
+                                        }/* else if (i == 6) { //反馈建议
+                                            engines.execScriptFile("./auto.js");//调用本地的倒入文件
+                                            toast("已复制联系方式")//反馈建议
+                                        } */else if (i == 6) {
+                                            setClip("3327049487")
+                                              }
+                                        else if (i == 7) {
+                                            exit();
+                                        }
+                                    });
+                                }
+                                if (touch == 1) {
+                                    touch = "0";
+                                }
+                            }
+                            return true;
+                    }
+                    return true;
+                });
+                //悬浮窗操作
+                window.action.click(() => { });
+            });
+        }
+        if (!checked) {
+            threads.start(function () {
+                floaty.closeAll();
+            });
+        }
+    });
+}//解析脚本内容
+function MusicJs(text, name) {
+   let arr = storageCollec.get("colloect")
+   if(arr&&arr.length){
+    if(arr.indexOf(name)!=-1){
+        sc = "❤️️"
+    }
+    else{
+        sc = "🖤️"
+    }
+   }else{
+    sc = "🖤️"
+   }
+    //悬浮窗样式
+    var musicw = floaty.window(
+    <frame alpha="0.7" bg="#001b6c9b">
+        <frame  >
+            <linear id="atrs" >
+                <img tint="#FFFFFF" id="atrss" src="@drawable/ic_visibility_black_48dp"/>
+            </linear>
+            <linear id="atr" w="auto" h="auto">
+                <card  id="action" w="auto" h="auto" cardBackgroundColor="#fffffb" cardElevation="3dp" cardCornerRadius="13dp" gravity="center" alpha="1" margin="3dp">
+                    <vertical padding="10" w="180dp" h="auto">
+                        <horizontal marginBottom="15dp"  h="30dp" w="*" gravity="center">
+                            <linear>
+                                <text id="names" marginLeft="10dp" marginRight="5dp" gravity="center_vertical" color="#000000" textStyle="bold" >Name</text>
+                            </linear>
+                        </horizontal>
+                        <card cardCornerRadius="13dp">
+                            <horizontal bg="#65c294" h="auto" w="*" gravity="center">
+                                <linear layout_weight="1" id="upper" h="40dp" w="40dp" gravity="center">
+                                    <img tint="#F0FFFF" src="http://124.221.219.146:5212/api/v3/file/get/20/%E5%90%8E%E9%80%80.png?sign=8OqLOuOFtwfj0b1339pPaNANuwlVIRfLCmkGAxsTHc4%3D%3A0" w="40dp" h="40dp" circle="true" />
+                                </linear>
+                                <linear layout_weight="1" id="starts" h="55dp" w="55dp" gravity="center">
+                                    <img tint="#F0FFFF" id="start" src="http://124.221.219.146:5212/api/v3/file/get/14/%E6%92%AD%E6%94%BE.png?sign=ZMs6WhB7TyXIorhsDZgNdobNguD9vMMe8A47NsYGORM%3D%3A0" w="68dp" h="68dp" circle="true" />
+                                </linear>
+                                <linear layout_weight="1" id="lower" h="40dp" w="40dp" gravity="center">
+                                    <img tint="#F0FFFF" src="http://124.221.219.146:5212/api/v3/file/get/21/%E5%89%8D%E8%BF%9B.png?sign=l2oArR9YDbmcjh7zD-Hub8XaJvVAmOJpXTIsYCKaHvU%3D%3A0" w="40dp" h="40dp" circle="true" />
+                                </linear>
+                                
+                                
+                            </horizontal>
+                        </card>
+                        
+                        <linear marginTop="15dp">
+                            <progressbar   id="progress" w="*" margin="10dp 0dp" style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" />
+                        </linear>
+                        
+                        
+                        <card marginTop="10" cardCornerRadius="13dp">
+                            <horizontal bg="#65c294"  gravity="center" >
+                                <button style="Widget.AppCompat.Button.Borderless" textColor="#FFFFFF" gravity="center" layout_weight="1" id="left" text="减速" textSize="20sp" w="auto" h="auto"  />
+                                <text text="X" textColor="#f15a22" textSize="20sp" />
+                                <text id="speed" text="1" textColor="#f15a22" textSize="20sp" />
+                                <button style="Widget.AppCompat.Button.Borderless" textColor="#ffffff" gravity="center" layout_weight="1" id="right" text="加速" textSize="20sp" w="auto" h="auto"  />
+                            </horizontal>
+                        </card>
+                        <horizontal>
+                            <linear layout_weight="1" marginTop="15" id="strs" w="30dp" h="30dp" gravity="center">
+                                <img src="@drawable/ic_visibility_off_black_48dp" w="30dp" h="30dp" circle="true" />
+                            </linear>
+                            {/*停止*/}
+                            <linear layout_weight="1" marginTop="15" id="closes" w="30dp" h="30dp" gravity="center">
+                                <img src="http://111.173.83.93:5212/api/v3/file/get/44/%E5%85%B3%E9%97%AD.jpeg?sign=hDA4qIUKoEMbotiO1QD1dMPe9EoKBIh_LmfLkZlLNjQ%3D%3A0" w="30dp" h="30dp" circle="true" />
+                            </linear>
+                            
+                            <linear layout_weight="1" marginTop="15" id="not" w="30dp" h="30dp" gravity="center">
+                                <img src="http://124.221.219.146:5212/api/v3/file/get/18/%E9%80%80%E5%87%BA.png?sign=rhYAMuMq3q0XfNLwJdON_gjnYsYcPtmpQM7103sAR2A%3D%3A0" w="30dp" h="30dp" circle="true" />
+                            </linear>
+                          <linear layout_weight="1" marginTop="15" w="25dp" h="30dp" gravity="center">
+                                <text  text="🖤️" textColor="red"  id="Collection" textSize="23sp" />
+                            </linear>
+                        </horizontal>
+                        
+                        <linear id="sst" h="30dp" w="30dp" gravity="center">
+                            <text id="status" text="暂停" textColor="#00AAFF" textSize="12sp" />
+                        </linear>
+                    </vertical>
+                </card>
+            </linear>
+        </frame>
+    </frame>
+    );
+    MusicStop = 0;
+    threads.start(function() {
+        var storage = storages.create("212624749.延迟");
+        var keyms = storage.get("skyms");
+        if (!keyms) {
+            keyms = 1
+        }
+        var storage = storages.create("212624749.键位");
+        var keys = storage.get("skykey");
+        var exp = / */g;
+        var txt = text.substr(text.indexOf("[") + 1, text.lastIndexOf("]") - text.indexOf("[") - 1);
+        var txt = txt.substr(txt.indexOf("[") + 1, txt.lastIndexOf("]") - txt.indexOf("[") - 1);
+        var txt = txt.substr(txt.indexOf("{") + 1, txt.lastIndexOf("}") - txt.indexOf("{") - 1);
+        var name = name;
+        var list = txt.split(/\{/g);
+        var listlen = list.length;
+        musicw.progress.setMax(listlen);
+        var time = 0;
+        var regexp = /[0-9]+/g;
+        sleep(500);
+        for (let i = 0; i < listlen; i++) {
+            while (musicw.status.getText() == "暂停") {
+                sleep(500);
+                if (MusicStop == 1) {
+                    break;
+                }
+            }
+            if (MusicStop == 1) {
+                break;
+            }
+            var sz = list[i].split(",");
+            var keyexp = /.*key.*/g;
+            if (sz[0].indexOf("k") > 0) {
+                var timsz = sz[0];
+                sz[0] = sz[1];
+                sz[1] = timsz;
+            }
+            var tm1 = sz[0].substr(sz[0].indexOf(":") + 1).replace(exp, "");
+            var tm1 = tm1.match(regexp);
+            var tm1 = parseInt(tm1);
+            //log(tm1);
+            var key = sz[1].substr(sz[1].indexOf(":") + 1);
+            var key = key.substr(key.indexOf("y") + 1, key.lastIndexOf("\"") - key.indexOf("y") - 1).replace(exp, "");
+            var key = key.match(regexp);
+            var key = parseInt(key);
+            //log(key);
+            if (key == "" || key == NaN || key == "NaN") {
+                continue;
+            }
+            var key1, key2;
+            if (key == 0) {
+                key1 = keys[0]["x"];
+                key2 = keys[0]["y"];
+            }
+            if (key == 1) {
+                key1 = keys[1]["x"];
+                key2 = keys[1]["y"];
+            }
+            if (key == 2) {
+                key1 = keys[2]["x"];
+                key2 = keys[2]["y"];
+            }
+            if (key == 3) {
+                key1 = keys[3]["x"];
+                key2 = keys[3]["y"];
+            }
+            if (key == 4) {
+                key1 = keys[4]["x"];
+                key2 = keys[4]["y"];
+            }
+            if (key == 5) {
+                key1 = keys[5]["x"];
+                key2 = keys[5]["y"];
+            }
+            if (key == 6) {
+                key1 = keys[6]["x"];
+                key2 = keys[6]["y"];
+            }
+            if (key == 7) {
+                key1 = keys[7]["x"];
+                key2 = keys[7]["y"];
+            }
+            if (key == 8) {
+                key1 = keys[8]["x"];
+                key2 = keys[8]["y"];
+            }
+            if (key == 9) {
+                key1 = keys[9]["x"];
+                key2 = keys[9]["y"];
+            }
+            if (key == 10) {
+                key1 = keys[10]["x"];
+                key2 = keys[10]["y"];
+            }
+            if (key == 11) {
+                key1 = keys[11]["x"];
+                key2 = keys[11]["y"];
+            }
+            if (key == 12) {
+                key1 = keys[12]["x"];
+                key2 = keys[12]["y"];
+            }
+            if (key == 13) {
+                key1 = keys[13]["x"];
+                key2 = keys[13]["y"];
+            }
+            if (key == 14) {
+                key1 = keys[14]["x"];
+                key2 = keys[14]["y"];
+            }
+            if (MusicStop == 1) {
+                break;
+            }
+            var tim = 0;
+            tim = tm1 - time;
+            if (tm1 > time) {
+                var speed = musicw.speed.getText();
+                var speed = parseFloat(speed);
+                if (tim > keyms) {
+                    var tim = tim;
+                } else {
+                    var tim = 0;
+                }
+                sleep(tim / speed);
+            }
+            if (MusicStop == 0) {
+                pre(key1, key2, keyms);
+            }
+            musicw.progress.setProgress(i);
+            time = tm1;
+        }
+        musicw.close();
+    }); //模拟触摸
+    function pre(key1, key2, keyms) {
+        threads.start(function() {
+            var chu = keyms / 10;
+            press(key1 + ran(), key2 + ran(), keyms + Math.round(Math.random() * chu));
+        });
+    } //触摸播放
+    // musicw.starts.click(function () {
+    //     musicw.status.setText("播放");
+    // });
+    // //触摸暂停
+    // musicw.stop.click(function () {
+    //     musicw.status.setText("暂停");
+    // });
+    musicw.starts.click(function() {
+        if (musicw.start.attr("src") == "@drawable/ic_pause_black_48dp") {
+            musicw.start.attr("src", "http://124.221.219.146:5212/api/v3/file/get/14/%E6%92%AD%E6%94%BE.png?sign=ZMs6WhB7TyXIorhsDZgNdobNguD9vMMe8A47NsYGORM%3D%3A0");
+            musicw.status.setText("暂停");
+
+        } else {
+            musicw.start.attr("src", "@drawable/ic_pause_black_48dp");
+            musicw.status.setText("播放");
+
+        }
+    });
+    //不知
+    musicw.not.click(function() {
+        toast("❤️目前正在开发中❤️");
+    });
+    //收藏
+    musicw.Collection.click(function() {
+        let arr = storageCollec.get("colloect")
+        if(arr&&arr.length&&arr.indexOf(musicw.names.text())!=-1){
+            arr.splice(arr.indexOf(musicw.names.text()),1)
+            storageCollec.put("colloect",arr)
+            musicw.Collection.setText("🖤️");
+            toast("取消收藏");
+        }else{
+            let a = []
+            if(storageCollec.get("colloect")){
+                a = storageCollec.get("colloect")
+            }
+            a.push(musicw.names.text())
+            storageCollec.put("colloect",a)
+            toast("收藏成功");
+            musicw.Collection.setText("❤️️");
+        }
+    });
+       //上一首
+       musicw.upper.click(function() {
+        threads.start(function() {
+            MusicStop = 1;
+            musicw.close();
+            var gs = threads.disposable();
+            threads.start(function() {
+                var hs = http.get("http://124.222.255.228:8099/dyx/app/getNameList").body.json();
+                gs.setAndNotify(hs)
+            })
+            var list = gs.blockedGet().list;
+            var lb = list[random(0, list.length)]
+
+            var Js = threads.disposable();
+            threads.start(function() {
+                var text = http.get("http://124.222.255.228:8099/dyx/app/getName?name=" + lb).body.json();
+                Js.setAndNotify(text);
+            });
+            var code = Js.blockedGet().code;
+            var js = Js.blockedGet().js;
+            MusicJs(AesDecode(js), lb);
+        })
+    });
+    //下一首
+    musicw.lower.click(function() {
+       // toast("未开发");
+        threads.start(function() {
+            MusicStop = 1;
+            musicw.close();
+            var gs = threads.disposable();
+            threads.start(function() {
+                var hs = http.get("http://124.222.255.228:8099/dyx/app/getNameList").body.json();
+                gs.setAndNotify(hs)
+            })
+            var list = gs.blockedGet().list;
+            var lb = list[random(0, list.length)]
+
+            var Js = threads.disposable();
+            threads.start(function() {
+                var text = http.get("http://124.222.255.228:8099/dyx/app/getName?name=" + lb).body.json();
+                Js.setAndNotify(text);
+            });
+            var code = Js.blockedGet().code;
+            var js = Js.blockedGet().js;
+            MusicJs(AesDecode(js), lb);
+        })
+    });
+    //隐藏
+    musicw.strs.click(function() {
+        musicw.atr.setVisibility(8);
+    })
+    //显示
+    musicw.atrss.click(function() {
+        musicw.atr.setVisibility(0);
+
+    })
+    musicw.sst.setVisibility(8);
+    //设置标题
+    musicw.names.setText(name);
+    //记录按键被按下时的触摸坐标
+    var x = 0,
+        y = 0;
+    //记录按键被按下时的悬浮窗位置
+    var windowX, windowY;
+    //关闭悬浮窗
+    musicw.closes.click(function() {
+        MusicStop = 1;
+        musicw.close();
+    });
+    //触摸减速
+    musicw.left.click(function() {
+        var speed = musicw.speed.getText();
+        if (speed == "1.9") {
+            musicw.speed.setText("1.8");
+            return;
+        }
+        if (speed == "1.7") {
+            musicw.speed.setText("1.6");
+            return;
+        }
+        if (speed == "1.4") {
+            musicw.speed.setText("1.3");
+            return;
+        }
+        if (speed == "1.2") {
+            musicw.speed.setText("1.1");
+            return;
+        }
+        var speed = parseFloat(speed);
+        var speed2 = 0.1;
+        if (speed > 2) {
+            speed2 = 0.5;
+        }
+        if (speed > 0.3) {
+            var speed = speed - speed2;
+            var speed = speed + "";
+            var speeds = speed.split(".");
+            if (speeds.length > 1) {
+                var speed = speeds[0] + "." + speeds[1].substr(0, 1) + "";
+            }
+            musicw.speed.setText(speed + "");
+        }
+    });
+    //触摸加速
+    musicw.right.click(function() {
+        var speed = musicw.speed.getText();
+        if (speed == "0.7") {
+            musicw.speed.setText("0.8");
+            return;
+        }
+        var speed = parseFloat(speed);
+        var speed2 = 0.1;
+        if (speed >= 2) {
+            speed2 = 0.5;
+        }
+        if (speed < 5) {
+            var speed = speed + speed2;
+            var speed = speed + "";
+            var speeds = speed.split(".");
+            if (speeds.length > 1) {
+                var speed = speeds[0] + "." + speeds[1].substr(0, 1) + "";
+            }
+            musicw.speed.setText(speed + "");
+        }
+    });
+    //悬浮窗拖动
+    musicw.action.setOnTouchListener(function(view, event) {
+        switch (event.getAction()) {
+            case event.ACTION_DOWN:
+                x = event.getRawX();
+                y = event.getRawY();
+                windowX = musicw.getX();
+                windowY = musicw.getY();
+                downTime = new Date().getTime();
+                return true;
+            case event.ACTION_MOVE:
+                //移动手指时调整悬浮窗位置
+                musicw.setPosition(windowX + (event.getRawX() - x),
+                    windowY + (event.getRawY() - y));
+                return true;
+        }
+        return true;
+    });
+
+    function ran() {
+        return Math.random() * 36 - 18;
+    }
+}
+//设置键位
+function SetKey() {
+    toast("按下音量减可取消设置键位");
+    var storage = storages.create("212624749.键位");
+    var w = floaty.rawWindow(
+        <frame id="action" gravity="center_horizontal" bg="#00000000">
+            <text id="toast" h="auto" w="auto" text="提示" textColor="#007d65" textSize="26sp" textStyle="bold" />
+        </frame>
+    );
+    w.setSize(-1, -1);
+    w.setTouchable(true);
+    setTimeout(() => {
+        w.close();
+    }, 60000);
+    var mosum = 0;
+    var skykey = [];
+    w.toast.setText("❤️请点击第一个琴键❤️");
+    //启用按键监听 
+    events.observeKey();
+    //监听音量下键按下 
+    events.onKeyUp("volume_down", function(event) {
+        events.removeAllKeyUpListeners("volume_down");
+        w.close();
+        toast("❤️已取消设置键位❤️");
+    });
+    w.action.setOnTouchListener(function(view, event) {
+        switch (event.getAction()) {
+            case event.ACTION_DOWN:
+                x = event.getRawX();
+                y = event.getRawY();
+                skykey[mosum] = {
+                    "x": x,
+                    "y": y
+                };
+                log(x + "  " + y);
+                mosum++;
+                var txt = "❤️已成功获取" + mosum + "个琴键❤️";
+                w.toast.setText(txt);
+                if (mosum == 15) {
+                    toast("❤️已保存所有键位完毕❤️");
+                    storage.put("skykey", skykey);
+                    events.removeAllKeyUpListeners("volume_down");
+                    w.close();
+                } else {
+                    txt += "请继续点击下一个";
+                }
+                return true;
+        }
+        return true;
+    });
+}
+
+function AesEncode(souce) {
+    var result = "";
+    var errstr = "";
+    var zx = 1;
+    var passkey = "";
+    if (passkey == undefined || passkey == "") passkey = AES_Key;
+    var text = java.lang.String(souce).getBytes(AES_Chat);
+    var mm = java.lang.String(passkey).getBytes(AES_Chat);
+    if (AES_Padding == "NoPadding" && (AES_Model == "ECB" || AES_Model == "CBC")) {
+        if (text.length % 16 != 0) {
+            //输出错误
+            errstr = AES_Model + "/" + AES_Padding + "要加密的内容长度必须是16的整数倍";
+            zx = 0;
+        }
+    }
+    if (mm.length != AES_Aws / 8) {
+        //输出错误
+        errstr = "密码长度必须为" + AES_Aws / 8 + "位!";
+        zx = 0;
+    }
+    var iv = "";
+    if (AES_Model != "ECB") {
+        iv = java.lang.String(passkey).getBytes();
+        if (iv.length != AES_Aws / 8) {
+            //输出错误
+            errstr = "偏移量长度必须为" + AES_Aws / 8 + "位!";
+            zx = 0;
+        }
+    }
+    var lx = "AES/" + AES_Model + "/" + AES_Padding;
+    if (zx == 1) {
+        var jg = aesEncode(text, mm, lx, iv);
+        if (AES_OutType == "base64") {
+            result = java.lang.String(android.util.Base64.encode(jg, 0)).trim();
+        } else if (AES_OutType == "Hex") {
+            result = bytestohexstring(jg).trim();
+        } else {
+            errstr = "输出形式未选择";
+        }
+    }
+    //根据需要可选择是否输入错误内容
+    return encodeURIComponent(result);
+}
+
+function AesDecode(souce) {
+    var result = "";
+    var errstr = "";
+    var zx = 1;
+    var text = "";
+    var passkey = "";
+    souce = decodeURIComponent(souce);
+    if (passkey == undefined || passkey == "") passkey = AES_Key;
+    if (AES_OutType == "base64") {
+        text = android.util.Base64.decode(souce, 0);
+    } else if (AES_OutType == "Hex") {
+        text = hexstringtobytes(souce);
+    } else {
+        errstr = "输出形式未选择";
+        zx = 0;
+    }
+    var mm = java.lang.String(passkey).getBytes(AES_Chat);
+    if (mm.length != AES_Aws / 8) {
+        errstr = "密码长度必须为" + AES_Aws / 8 + "位!";
+        zx = 0;
+    }
+    var iv = "";
+    if (AES_Model != "ECB") {
+        var iv = java.lang.String(AES_Key).getBytes();
+        if (iv.length != AES_Aws / 8) {
+            errstr = "偏移长度必须为" + AES_Aws / 8 + "位!";
+            zx = 0;
+        }
+    }
+    var lx = "AES/" + AES_Model + "/" + AES_Padding;
+    if (zx == 1) {
+        try {
+            var jg = aesDecode(text, mm, lx, iv);
+            result = java.lang.String(jg, AES_Chat);
+        } catch (e) {
+            errstr = "解密错误!";
+        }
+    }
+    //根据需要可选择是否输入错误内容
+    return result;
+}
+
+function aesEncode(byteContent, password, lx, iv) {
+    var key = javax.crypto.spec.SecretKeySpec(password, "AES");
+    var cipher = javax.crypto.Cipher.getInstance(lx);
+    if (AES_Model == "ECB") {
+        cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, key);
+    } else {
+        cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, key, javax.crypto.spec.IvParameterSpec(iv));
+    }
+    return cipher.doFinal(byteContent);
+}
+
+function aesDecode(byteContent, password, lx, iv) {
+    var key = javax.crypto.spec.SecretKeySpec(password, "AES");
+    var cipher = javax.crypto.Cipher.getInstance(lx);
+    if (AES_Model == "ECB") {
+        cipher.init(javax.crypto.Cipher.DECRYPT_MODE, key);
+    } else {
+        cipher.init(javax.crypto.Cipher.DECRYPT_MODE, key, javax.crypto.spec.IvParameterSpec(iv));
+    }
+    return cipher.doFinal(byteContent);
+}
+
+function bytestohexstring(bytes) {
+    var val = "";
+    for (var i = 0; i < bytes.length; i++) {
+        var tmp = bytes[i];
+        if (tmp < 0) {
+            tmp = 256 + tmp;
+        }
+        tmp = tmp.toString(16);
+        if ((tmp + "").length == 1) {
+            tmp = "0" + tmp;
+        }
+        val += tmp;
+    }
+    return val;
+}
+
+function hexstringtobytes(str) {
+    var val = [];
+    str = str.split("");
+    for (var i = 0; i < str.length; i++) {
+        var tmp = "" + str[i] + str[i + 1];
+        tmp = parseInt(tmp, 16);
+        if (tmp <= 127) {
+            val[i / 2] = tmp;
+        } else {
+            val[i / 2] = tmp - 256;
+        }
+    }
+    return val;
+}
